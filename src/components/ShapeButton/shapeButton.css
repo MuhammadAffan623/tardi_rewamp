@@ -1,0 +1,16 @@
+.pri-btn {
+  max-width: 369px;
+  width: 270px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.btn {
+  background-color: transparent;
+  width: 100%;
+
+  color: #ffffff;
+  border: none;
+  outline: none;
+  height: 126px;
+}

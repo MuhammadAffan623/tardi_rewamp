@@ -1,0 +1,37 @@
+.search-btn {
+  max-width: 369px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cus-input {
+  background-color: transparent;
+  width: 100%;
+  padding-inline: 50px;
+  padding-right: 30px;
+  border: none !important;
+  outline: none !important;
+  height: 96px;
+}
+::-webkit-input-placeholder {
+  color: #ffffff;
+}
+::placeholder {
+  color: #ffffff;
+}
+input::placeholder {
+  color: #ffffff;
+}
+
+input::-moz-placeholder {
+  color: #ffffff;
+}
+
+input:-ms-input-placeholder {
+  color: #ffffff;
+}
+
+input::-ms-input-placeholder {
+  color: #ffffff;
+}

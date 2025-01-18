@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://www.creativefabrica.com/product/futurama/Futurama-Modern-Titling-Fonts/ref/236558/");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #0a192f88;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Source Code Pro", monospace;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a192f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.5);
+}
+/* TARDINATORS CORE COMMUNITY */
+
+@media screen and (max-width: 1320px) {
+  .table-col-header-title {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 1130px) {
+  .table-col-header-title {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 1020px) {
+  .table-col-header-title {
+    font-size: 16px;
+  }
+}
+
+.leaderbaord-page-mobile {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+@media screen and (max-width: 996px) {
+  .leaderbaord-page-desktop {
+    display: none;
+  }
+
+  .leaderbaord-page-mobile {
+    display: block;
+  }
+}
+
+.leaderbaord-page-mobile-hero {
+  aspect-ratio: 151/90;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.leaderbaord-page-mobile-table {
+  background-color: #073d5c;
+  border-radius: 32px 32px 0 0;
+  color: #fff;
+  padding: 16px;
+  margin-top: -36px;
+  padding-top: 40px;
+  font-size: 14px;
+  min-height: 80vh;
+  background-position: left top;
+  background-size: contain;
+  background-repeat: repeat-y;
+}
+
+.mobile-table-item {
+  display: grid;
+  grid-template-columns: 20px 32px 1fr 100px;
+  gap: 12px;
+  padding: 8px 18px;
+  background-color: rgba(37, 39, 40, 0.9);
+  border-radius: 12px;
+  margin-bottom: 8px;
+  align-items: center;
+  min-height: 48px;
+}
+
+.mobile-table-item.header {
+  grid-template-columns: 64px 1fr 100px;
+  background-color: #00eeffdd;
+}
+
+.mobile-table-item--avatar {
+  aspect-ratio: 1/1;
+  width: 100%;
+  border-radius: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.mobile-table-item--username {
+  overflow: hidden;
+white-space: nowrap;
+text-overflow: ellipsis;
+}
+
+.wallet-adapter-button-trigger {
+  background-color: transparent;
+}
+
+.wallet-adapter-button:not([disabled]):hover {
+  background-color: transparent;
+}
