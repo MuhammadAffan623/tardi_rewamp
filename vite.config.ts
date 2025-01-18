@@ -7,9 +7,9 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["lucide-react"],
   },
-  build: {
-    rollupOptions: {
-      external: ["@solana/wallet-adapter-react"], // Add the package here
-    },
-  },
+  // build: {
+  //   rollupOptions: {
+  //     external: ["@solana/wallet-adapter-react"], // Add the package here
+  //   },
+  // },
 });
