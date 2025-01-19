@@ -6,16 +6,17 @@ import Heading from "../components/Heading";
 import ShapeButton from "../components/ShapeButton";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
+import axios from "axios";
 
 const HomePage = () => {
   const { connected, publicKey } = useWallet();
-  console.log(publicKey, connected);
+  console.log(publicKey?.toString(), connected);
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [tempCounter, setTempCounter] = useState(0);
 
   const [isLoginError, setIsLoginError] = useState(false);
   const [isConnectionError, setIsConnectionError] = useState(false);
-
+  const [isWhiteliested, setIswhitelisted] = useState(false);
   const [checkboxes, setCheckboxes] = useState([
     { id: "checkbox1", label: "Connect SUI Wallet", checked: false },
     { id: "checkbox2", label: "Connect Telegram", checked: false },
@@ -47,6 +48,34 @@ const HomePage = () => {
       );
     }
   }, [connected]);
+
+  useEffect(() => {
+    const checkWhitelist = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/api/v1/users/isWhiteList",
+          {
+            walletAddress: publicKey?.toString(),
+          }
+        );
+        console.log("response", response);
+        if (response?.data?.data?.isWhitelist) {
+          //success
+          console.log("user is white listed");
+          setIswhitelisted(true);
+        } else {
+          console.log("user is not white listed");
+          // give error and say user not white listed
+          setIswhitelisted(false);
+        }
+      } catch (err) {
+        console.error("Failed to fetch leaderboard data.", err);
+      }
+    };
+    if (publicKey?.toString()?.length) {
+      checkWhitelist();
+    }
+  }, [publicKey?.toString()]);
 
   return (
     <PGLayout className=" bg-cover ">
