@@ -182,9 +182,15 @@ const HomePage = () => {
     })
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (isWhiteliested && telegramValue !== "" && twitterValue !== "") {
-      navigate('/leaderboard')
+      await apiRequest<isWhiteList>("/users", "post", {
+        walletAddress: publicKey.toString(),
+        twitterId: twitterValue
+      }).then(() => { 
+        navigate('/leaderboard')
+      })
+
     }
   }
   return (
