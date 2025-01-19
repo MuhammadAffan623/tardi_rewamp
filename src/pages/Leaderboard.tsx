@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { RowData, TableColumn } from "../types";
 import PGLayout from "../components/PGLayout";
 import { Table } from "../components/Table";
@@ -11,14 +10,16 @@ import timg4 from "../Assets/timg4.png";
 import ShapeButton from "../components/ShapeButton";
 import Search from "../components/Search";
 import Heading from "../components/Heading";
-import mobileHero from "../../public/leaderbaord-page-mobile-hero.png";
+import profileImg from "../../public/common/profile.jpg";
 import desktopBG from "../../public/bg.png";
 import mobileTableBGPattern from "../../public/mobile-leaderboard-bg-pattern.png";
+import { apiRequest } from "../utils/axios";
+import mobileHero from "../../public/leaderbaord-page-mobile-hero.png";
 
 interface User {
   _id: string;
-  twitterUsername: string;
-  profileImage: string;
+  twitterUsername?: string;
+  profileImage?: string;
   isWhiteListed: boolean;
 }
 
@@ -40,6 +41,12 @@ interface LeaderboardEntry {
   score: number;
   createdAt: string;
   updatedAt: string;
+}
+
+interface IGetLeaderboard {
+  data: {
+    leaderBoard: LeaderboardEntry[]
+  }
 }
 
 // const columns: TableColumn<LeaderboardEntry>[] = [
@@ -91,14 +98,14 @@ const columns: TableColumn<LeaderboardEntry>[] = [
       <div className="flex items-center gap-3">
         <div className="relative">
           <img
-            src={row.userId.profileImage}
-            alt={row.userId.twitterUsername}
+            src={row?.userId?.profileImage ?? profileImg}
+            alt={row?.userId?.twitterUsername ?? ""}
             className="min-w-[48px] min-h-[48px] w-[48px] h-[48px] object-cover border border-cyan-500/50"
           />
           <div className="absolute inset-0 rounded-full border border-cyan-500/20 animate-pulse" />
         </div>
         <span className="font-['Source_Code_Pro']">
-          {row.userId.twitterUsername}
+          {row?.userId?.twitterUsername ?? ""}
         </span>
       </div>
     ),
@@ -148,11 +155,9 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await axios.get<{
-          data: { leaderBoard: LeaderboardEntry[] };
-        }>("http://localhost:5000/api/v1/leaderboard/today");
-        setData(response.data.data.leaderBoard);
-        setFilteredData(response.data.data.leaderBoard); // Initialize with full data
+        const response = await apiRequest<IGetLeaderboard>('/leaderboard/today', 'get')
+        setData(response?.data?.leaderBoard);
+        setFilteredData(response?.data?.leaderBoard); // Initialize with full data
       } catch (err) {
         console.error("Failed to fetch leaderboard data.", err);
       }
@@ -162,20 +167,25 @@ const Leaderboard = () => {
   }, []);
 
   useEffect(() => {
-    setFilteredData(
-      data.filter((entry) =>
-        entry.userId.twitterUsername
-          .toLowerCase()
-          .includes(search.toLowerCase())
-      )
-    );
+    if (search) {
+      setFilteredData(
+        data.filter((entry) =>
+          entry?.userId?.twitterUsername
+            .toLowerCase()
+            .includes(search.toLowerCase())
+        )
+      );
+    }
+    else {
+      setFilteredData(data)
+    }
   }, [search, data]);
 
   return (
     <PGLayout bgImage={desktopBG}>
       <div className="mx-auto min-h-screen py-[50px] max-w-[1470px] w-[90%] leaderbaord-page-desktop">
         <ShapeButton
-          onClick={() => {}}
+          onClick={() => { }}
           buttonText="[LOGOUT]"
           containerClassName="ml-auto mb-[10px]"
         />
@@ -209,6 +219,46 @@ const Leaderboard = () => {
               </div>
             }
           />
+        </div>
+      </div>
+      <div className="leaderbaord-page-mobile">
+        <div
+          className="leaderbaord-page-mobile-hero"
+          style={{
+            backgroundImage: `url(${mobileHero})`,
+          }}
+        ></div>
+        <div
+          className="leaderbaord-page-mobile-table"
+          style={{
+            backgroundImage: `url(${mobileTableBGPattern})`,
+          }}
+        >
+          <div className="mobile-table-item header">
+            <div className="mobile-table-item--sno">Score</div>
+
+            <div className="mobile-table-item--username">X</div>
+            <div className="mobile-table-item--points">Points</div>
+          </div>
+          {[...filteredData].map(
+            ({ userId, score }, i) => {
+              return (
+                <div className="mobile-table-item">
+                  <div className="mobile-table-item--sno">{i + 1}</div>
+                  <div
+                    className="mobile-table-item--avatar"
+                    style={{
+                      backgroundImage: `url(${userId?.profileImage || profileImg})`,
+                    }}
+                  ></div>
+                  <div className="mobile-table-item--username">{userId?.twitterUsername || ""}</div>
+                  <div className="mobile-table-item--points">
+                    {score} pts
+                  </div>
+                </div>
+              );
+            }
+          )}
         </div>
       </div>
     </PGLayout>

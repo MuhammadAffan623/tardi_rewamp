@@ -6,11 +6,34 @@ import Heading from "../components/Heading";
 import ShapeButton from "../components/ShapeButton";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
-import axios from "axios";
+import Shapes from "../components/Shapes";
+import successBG from "../../public/common/RedBox_Buttoncard.png";
+import { apiRequest } from "../utils/axios";
+import { useLocation, useNavigate } from "react-router-dom";
+
+interface isWhiteList {
+  data: {
+    isWhitelist: boolean;
+    token: string
+    user: {
+      telegramId?: string
+      twitterId?: string
+    }
+  }
+}
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const params = queryParams.get("twitterToken")
+  console.log(params)
   const { connected, publicKey } = useWallet();
   console.log(publicKey?.toString(), connected);
+  const [isTelegram, setIsTelegram] = useState(false)
+  const [isX, setIsX] = useState(false)
+  const [telegramValue, setTelegramValue] = useState('')
+  const [twitterValue, setTwitterValue] = useState('')
   const [showLoginForm, setShowLoginForm] = useState(false);
   const [tempCounter, setTempCounter] = useState(0);
 
@@ -23,12 +46,54 @@ const HomePage = () => {
     { id: "checkbox3", label: "Connect X", checked: false },
   ]);
 
+  useEffect(() => {
+    const getUser = async (token: string) => {
+      localStorage.setItem("token", token)
+      await apiRequest<isWhiteList>("/users", "get", {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }).then((res) => {
+        setIsX(false)
+        setTwitterValue(res.data.user.twitterId)
+        setTelegramValue(res.data.user.telegramId)
+        setCheckboxes((prev) =>
+          prev.map((checkbox) =>
+            checkbox.id === "checkbox3"
+              ? { ...checkbox, checked: true }
+              : checkbox
+          )
+        );
+      })
+      // if (response?.data?.isWhitelist && response?.data?.user?.telegramId && response?.data?.user?.twitterId) {
+      //   navigate('/leaderboard')
+      // }
+    }
+    if (params) {
+      getUser(params)
+    }
+
+
+  }, [params])
+
   const handleCheckboxChange = (id: string, checked: boolean) => {
-    setCheckboxes((prev) =>
-      prev.map((checkbox) =>
-        checkbox.id === id ? { ...checkbox, checked } : checkbox
-      )
-    );
+    if (id === 'checkbox2') {
+      const telegram = checkboxes.find((item) => item.id === id)?.checked
+      if (!telegram) {
+        setIsTelegram(true)
+      }
+    }
+    if (id === "checkbox3") {
+      if (isX) {
+        const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+        window.location.href = `${baseUrl}/users/twitterlogin`;
+      }
+    }
+    // setCheckboxes((prev) =>
+    //   prev.map((checkbox) =>
+    //     checkbox.id === id ? { ...checkbox, checked } : checkbox
+    //   )
+    // );
   };
 
   const handleButtonClick = () => {
@@ -52,21 +117,38 @@ const HomePage = () => {
   useEffect(() => {
     const checkWhitelist = async () => {
       try {
-        const response = await axios.post(
-          "http://localhost:5000/api/v1/users/isWhiteList",
-          {
-            walletAddress: publicKey?.toString(),
-          }
-        );
+        const response = await apiRequest<isWhiteList>("/users/isWhiteList", "post", { walletAddress: publicKey?.toString(), })
+        // const response = await axios.post(
+        //   "http://localhost:5000/api/v1/users/isWhiteList",
+        //   {
+        //     walletAddress: publicKey?.toString(),
+        //   }
+        // );
         console.log("response", response);
-        if (response?.data?.data?.isWhitelist) {
+        if (response?.data?.isWhitelist) {
+          localStorage.setItem("token", response?.data?.token)
           //success
           console.log("user is white listed");
           setIswhitelisted(true);
         } else {
+          localStorage.setItem("token", response?.data?.token)
           console.log("user is not white listed");
           // give error and say user not white listed
           setIswhitelisted(false);
+        }
+        if (response?.data?.user?.telegramId) {
+          setTelegramValue(response?.data?.user?.telegramId)
+          setCheckboxes((prev) =>
+            prev.map((checkbox) =>
+              checkbox.id === "checkbox2"
+                ? { ...checkbox, checked: true }
+                : checkbox
+            )
+          );
+          setIsTelegram(false)
+          if (response?.data?.user?.telegramId && response?.data?.isWhitelist) {
+            setIsX(true)
+          }
         }
       } catch (err) {
         console.error("Failed to fetch leaderboard data.", err);
@@ -77,6 +159,34 @@ const HomePage = () => {
     }
   }, [publicKey?.toString()]);
 
+  const handleTelegram = async () => {
+    const token = localStorage.getItem("token");
+    await apiRequest('/users/addTelegram', 'post', {
+      telegramId: telegramValue
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(() => {
+      setCheckboxes((prev) =>
+        prev.map((checkbox) =>
+          checkbox.id === "checkbox2"
+            ? { ...checkbox, checked: true }
+            : checkbox
+        )
+      );
+      setIsTelegram(false)
+      if (isWhiteliested) {
+        setIsX(true)
+      }
+    })
+  }
+
+  const handleLogin = () => {
+    if (isWhiteliested && telegramValue !== "" && twitterValue !== "") {
+      navigate('/leaderboard')
+    }
+  }
   return (
     <PGLayout className=" bg-cover ">
       <div className=" mx-auto max-w-[1470px] w-[90%] flex flex-col items-center  min-h-screen">
@@ -109,14 +219,30 @@ const HomePage = () => {
           text="TARDINATORS CORE COMMUNITY"
           className=" max-w-[500px] w-[50%] mt-40 "
         />
-        {connected && (
+        {!isTelegram && connected && (
           <CardOfCheckboxes
             className=" w-full"
             checkboxes={checkboxes}
             onCheckboxChange={handleCheckboxChange}
-            onButtonClick={handleButtonClick}
+            onButtonClick={handleLogin}
           />
         )}
+        <>{isTelegram &&
+          <Shapes
+            bgShapeImg={successBG}
+            className={` max-w-[400px] min-h-[310px]  pl-[80px] object-cover w-full`}
+          >
+            <div className="flex flex-col h-[90px] justify-between items-end w-[90%] mx-auto gap-5 ">
+              <input className="rounded-0 py-1 text-white bg-black w-[97%] mr-auto  focus-visible:!border-0" type="text" onChange={(e) => setTelegramValue(e.target.value)} placeholder="Enter Telegram ID" />
+              <button
+                onClick={handleTelegram}
+                className="w-full flex justify-end text-white font-['Source_Code_Pro'] mt-10 font-[800] text-[20px] py-2 px-4 "
+              >
+                [Submit]
+              </button>
+            </div>
+          </Shapes>
+        }</>
         {/* {!showLoginForm ? null : !isLoginError ? (
           <CardOfCheckboxes
             className=" w-full"
