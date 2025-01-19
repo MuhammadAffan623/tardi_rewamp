@@ -184,7 +184,7 @@ const HomePage = () => {
 
   const handleLogin = async () => {
     if (isWhiteliested && telegramValue !== "" && twitterValue !== "") {
-      await apiRequest<isWhiteList>("/users", "post", {
+      await apiRequest("/users", "post", {
         walletAddress: publicKey.toString(),
         twitterId: twitterValue
       }).then(() => { 
