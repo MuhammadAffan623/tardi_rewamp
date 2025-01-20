@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import routes from "./routes";
 import { useMemo } from "react";
@@ -12,6 +12,13 @@ import { useMemo } from "react";
 // import '@solana/wallet-adapter-react-ui/styles.css';
 import { WalletProvider } from '@suiet/wallet-kit';
 import '@suiet/wallet-kit/style.css';
+
+const PrivateRoute = ({ element }) => {
+  const isAuthenticated = localStorage.getItem("token"); // Replace with your actual authentication logic
+
+  return isAuthenticated ? element : <Navigate to="/" replace />;
+};
+
 
 function App() {
   // const wallets = useMemo(
@@ -30,15 +37,18 @@ function App() {
     <>
       <WalletProvider>
         <Routes>
-          <Route>
-            <Route index element={<HomePage />} />
-            {routes.map((routes, index) => {
-              const { path, component: Component } = routes;
-              return (
-                <Route key={index} path={path} element={<Component />} />
-              );
-            })}
-          </Route>
+          {routes.map(({ path, component: Component }, index) => {
+            const isPrivate = path === "/leaderboard";
+            return (
+              <Route
+                key={index}
+                path={path}
+                element={
+                  isPrivate ? <PrivateRoute element={<Component />} /> : <Component />
+                }
+              />
+            );
+          })}
         </Routes>
       </WalletProvider>
 
