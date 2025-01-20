@@ -5,11 +5,12 @@ import ErrorCard from "../components/ErrorCard";
 import Heading from "../components/Heading";
 import ShapeButton from "../components/ShapeButton";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-import { useWallet } from "@solana/wallet-adapter-react";
+import { useWallet } from "@suiet/wallet-kit";
 import Shapes from "../components/Shapes";
 import successBG from "../../public/common/RedBox_Buttoncard.png";
 import { apiRequest } from "../utils/axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import {ConnectButton} from '@suiet/wallet-kit';
 
 interface isWhiteList {
   data: {
@@ -28,8 +29,8 @@ const HomePage = () => {
   const queryParams = new URLSearchParams(location.search);
   const params = queryParams.get("twitterToken")
   console.log(params)
-  const { connected, publicKey } = useWallet();
-  console.log(publicKey?.toString(), connected);
+  const { connected, account } = useWallet();
+  console.log(account.address, "connected");
   const [isTelegram, setIsTelegram] = useState(false)
   const [isX, setIsX] = useState(false)
   const [telegramValue, setTelegramValue] = useState('')
@@ -117,11 +118,11 @@ const HomePage = () => {
   useEffect(() => {
     const checkWhitelist = async () => {
       try {
-        const response = await apiRequest<isWhiteList>("/users/isWhiteList", "post", { walletAddress: publicKey?.toString(), })
+        const response = await apiRequest<isWhiteList>("/users/isWhiteList", "post", { walletAddress: account?.address, })
         // const response = await axios.post(
         //   "http://localhost:5000/api/v1/users/isWhiteList",
         //   {
-        //     walletAddress: publicKey?.toString(),
+        //     walletAddress: address,
         //   }
         // );
         console.log("response", response);
@@ -153,11 +154,11 @@ const HomePage = () => {
       } catch (err) {
         console.error("Failed to fetch leaderboard data.", err);
       }
-    };
-    if (publicKey?.toString()?.length) {
+    };  
+    if (account?.address?.length) {
       checkWhitelist();
     }
-  }, [publicKey?.toString()]);
+  }, [account?.address]);
 
   const handleTelegram = async () => {
     const token = localStorage.getItem("token");
@@ -185,7 +186,7 @@ const HomePage = () => {
   const handleLogin = async () => {
     if (isWhiteliested && telegramValue !== "" && twitterValue !== "") {
       await apiRequest("/users", "post", {
-        walletAddress: publicKey.toString(),
+        walletAddress: account?.publicKey.toString(),
         twitterId: twitterValue
       }).then(() => { 
         navigate('/leaderboard')
@@ -205,7 +206,7 @@ const HomePage = () => {
             //     <WalletMultiButton>Connect Wallet</WalletMultiButton>
             //   )
             // }
-            buttonText={<WalletMultiButton>Connect Wallet</WalletMultiButton>}
+            buttonText={<ConnectButton>Connect Wallet</ConnectButton>}
             // onClick={() => {
             //   // temp logic
             //   const newCount = tempCounter + 1;

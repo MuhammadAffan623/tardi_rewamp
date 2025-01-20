@@ -118,8 +118,8 @@ body {
 
 .mobile-table-item--username {
   overflow: hidden;
-white-space: nowrap;
-text-overflow: ellipsis;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .wallet-adapter-button-trigger {
@@ -127,5 +127,14 @@ text-overflow: ellipsis;
 }
 
 .wallet-adapter-button:not([disabled]):hover {
+  background-color: transparent;
+}
+
+.wkit-button {
+  width: fit-content;
+  background-color: transparent;
+}
+
+.wkit-button:hover {
   background-color: transparent;
 }
