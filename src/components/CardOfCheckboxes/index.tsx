@@ -24,9 +24,9 @@ const CardOfCheckboxes: React.FC<CardOfCheckboxesProps> = ({
   return (
     <Shapes
       bgShapeImg={successBG}
-      className={` max-w-[400px] min-h-[310px]  pl-[80px] object-cover ${className}`}
+      className={`w-[420px] sm:w-full  sm:max-w-[400px] min-h-[310px] pl-[65px]  sm:pl-[80px] object-cover ${className}`}
     >
-      <div className=" flex flex-col gap-2 items-start mt-10 w-[90%] mx-auto ">
+      <div className=" flex flex-col gap-2 items-start mt-10 w-[290px] sm:w-[90%] mx-auto ">
         {checkboxes.map((checkbox) => (
           <Checkbox
             key={checkbox.id}
