@@ -15,6 +15,9 @@ import desktopBG from "../../public/bg.png";
 import mobileTableBGPattern from "../../public/mobile-leaderboard-bg-pattern.png";
 import { apiRequest } from "../utils/axios";
 import mobileHero from "../../public/leaderbaord-page-mobile-hero.png";
+import { useWallet } from "@suiet/wallet-kit";
+import { useNavigate } from "react-router-dom";
+
 
 interface User {
   _id: string;
@@ -90,12 +93,12 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "userId",
     title: "User",
-    width: "1.5fr",
+    width: "2fr",
     render: (
       _: string | number | User | Metrics,
       row: LeaderboardEntry // Type added to _
     ) => (
-      <div className="flex items-center gap-3">
+      <div className="flex items-center min-w-[240px] gap-3">
         <div className="relative">
           <img
             src={row?.userId?.profileImage ?? profileImg}
@@ -104,7 +107,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
           />
           <div className="absolute inset-0 rounded-full border border-cyan-500/20 animate-pulse" />
         </div>
-        <span className="font-['Source_Code_Pro']">
+        <span className="font-['Source_Code_Pro'] overflow-hidden text-ellipsis whitespace-nowrap  w-[calc(240px-60px)]">
           {row?.userId?.twitterUsername ?? ""}
         </span>
       </div>
@@ -148,6 +151,8 @@ const columns: TableColumn<LeaderboardEntry>[] = [
 ];
 
 const Leaderboard = () => {
+  const { disconnect } = useWallet();
+  const navigate = useNavigate();
   const [search, setSearch] = useState<string>("");
   const [data, setData] = useState<LeaderboardEntry[]>([]);
   const [filteredData, setFilteredData] = useState<LeaderboardEntry[]>([]);
@@ -185,7 +190,11 @@ const Leaderboard = () => {
     <PGLayout bgImage={desktopBG}>
       <div className="mx-auto min-h-screen py-[50px] max-w-[1470px] w-[90%] leaderbaord-page-desktop">
         <ShapeButton
-          onClick={() => { }}
+          onClick={async () => {
+            localStorage.removeItem("token")
+            await disconnect();
+            navigate('/')
+          }}
           buttonText="[LOGOUT]"
           containerClassName="ml-auto mb-[10px]"
         />
