@@ -154,6 +154,17 @@ const HomePage = () => {
             setIsX(true)
           }
         }
+        if(response?.data?.user?.twitterId){
+          setTwitterValue(response?.data?.user?.twitterId)
+          setIsX(false)
+          setCheckboxes((prev) =>
+            prev.map((checkbox) =>
+              checkbox.id === "checkbox3"
+                ? { ...checkbox, checked: true }
+                : checkbox
+            )
+          );
+        }
       } catch (err) {
         console.error("Failed to fetch leaderboard data.", err);
       }
@@ -227,7 +238,7 @@ const HomePage = () => {
 
         <Heading
           text="TARDINATORS CORE COMMUNITY"
-          className=" max-w-[500px] w-[50%] mt-40 "
+          className=" max-w-[500px] w-[80%] sm:w-[50%] mt-40 "
         />
         {!isTelegram && connected && (
           <CardOfCheckboxes
