@@ -30,7 +30,7 @@ const HomePage = () => {
   const params = queryParams.get("twitterToken")
   console.log(params)
   const { connected, account } = useWallet();
-  console.log(account.address, "connected");
+  console.log(account?.address, "connected");
   const [isTelegram, setIsTelegram] = useState(false)
   const [isX, setIsX] = useState(false)
   const [telegramValue, setTelegramValue] = useState('')
