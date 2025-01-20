@@ -89,6 +89,9 @@ const HomePage = () => {
         const baseUrl = import.meta.env.VITE_APP_BASE_URL;
         window.location.href = `${baseUrl}/users/twitterlogin`;
       }
+      else {
+        alert("wallet address is not whitelisted!!")
+      }
     }
     // setCheckboxes((prev) =>
     //   prev.map((checkbox) =>
