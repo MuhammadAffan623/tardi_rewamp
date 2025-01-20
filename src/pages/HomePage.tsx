@@ -189,7 +189,7 @@ const HomePage = () => {
   const handleLogin = async () => {
     if (isWhiteliested && telegramValue !== "" && twitterValue !== "") {
       await apiRequest("/users", "post", {
-        walletAddress: account?.publicKey.toString(),
+        walletAddress: account?.address,
         twitterId: twitterValue
       }).then(() => { 
         navigate('/leaderboard')
