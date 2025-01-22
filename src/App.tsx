@@ -10,15 +10,15 @@ import { useMemo } from "react";
 // import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
 // import { clusterApiUrl } from "@solana/web3.js";
 // import '@solana/wallet-adapter-react-ui/styles.css';
-import { WalletProvider } from '@suiet/wallet-kit';
-import '@suiet/wallet-kit/style.css';
+import { WalletProvider } from "@suiet/wallet-kit";
+import "@suiet/wallet-kit/style.css";
+import { Toaster } from "react-hot-toast";
 
 const PrivateRoute = ({ element }) => {
   const isAuthenticated = localStorage.getItem("token"); // Replace with your actual authentication logic
 
   return isAuthenticated ? element : <Navigate to="/" replace />;
 };
-
 
 function App() {
   // const wallets = useMemo(
@@ -44,14 +44,27 @@ function App() {
                 key={index}
                 path={path}
                 element={
-                  isPrivate ? <PrivateRoute element={<Component />} /> : <Component />
+                  isPrivate ? (
+                    <PrivateRoute element={<Component />} />
+                  ) : (
+                    <Component />
+                  )
                 }
               />
             );
           })}
         </Routes>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000, // 4 seconds
+            style: {
+              background: "#333",
+              color: "#fff",
+            },
+          }}
+        />
       </WalletProvider>
-
     </>
   );
 }
