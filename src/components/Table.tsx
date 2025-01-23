@@ -61,7 +61,7 @@ export const Table =  <T,>({
         <div>{beforeContent}</div>
         {/* Header */}
         <div
-          className="grid py-[16px]  px-[50px] bg-[rgba(0,0,0,0.34)] "
+          className="grid py-[16px] px-[10px] lg:px-[50px] bg-[rgba(0,0,0,0.34)] pr-[10px] "
           style={{
             gridTemplateColumns: columns
               .map((col) => col.width || "1fr")
@@ -71,7 +71,7 @@ export const Table =  <T,>({
           {columns.map((column) => (
             <div
               key={column.key as string}
-              className=" text-center font-['Source_Code_Pro'] uppercase tracking-wider font-[800] text-[24px] text-white py-4 last:text-end table-col-header-title"
+              className=" text-center font-['Source_Code_Pro'] uppercase tracking-wider font-[800] text-[24px] text-white py-4 table-col-header-title"
             >
               {column.title}
             </div>
@@ -83,7 +83,7 @@ export const Table =  <T,>({
           {filteredData?.map((row: any, index: number) => (
             <div
               key={index}
-              className={`grid justify-center items-center  transition-all pl-[50px] pr-[10px] border-[3px] border-transparent duration-200 *:hover:text-[#75FF86] hover:border-[#75FF86]  ${
+              className={`grid justify-center items-center  transition-all pl-[10px] lg:pl-[50px] pr-[10px] border-[3px] border-transparent duration-200 *:hover:text-[#75FF86] hover:border-[#75FF86]  ${
                 index % 2 === 0 ? "bg-[#0098BA]  " : "bg-[#071F0A00] "
               }`}
               style={{
@@ -95,7 +95,7 @@ export const Table =  <T,>({
               {columns.map((column) => (
                 <div
                   key={column.key as string}
-                  className="px-4 py-3 text-center text-white font-['Source_Code_Pro'] font-bold text-[20px]  "
+                  className="px-1 lg:px-4 py-3 text-center text-white font-['Source_Code_Pro'] font-bold text-[20px] overflow-hidden text-ellipsis whitespace-nowrap "
                 >
                   {column.render
                     ? column.render(row[column.key], row)

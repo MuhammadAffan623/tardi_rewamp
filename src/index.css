@@ -58,7 +58,7 @@ body {
   height: 100%;
 }
 
-@media screen and (max-width: 996px) {
+@media screen and (max-width: 786px) {
   .leaderbaord-page-desktop {
     display: none;
   }
@@ -69,7 +69,7 @@ body {
 }
 
 .leaderbaord-page-mobile-hero {
-  aspect-ratio: 151/90;
+  aspect-ratio: 170/90;
   width: 100%;
   background-position: center;
   background-size: cover;
@@ -102,6 +102,10 @@ body {
   min-height: 48px;
 }
 
+.mobile-table-item:hover {
+  background-color: rgba(117, 255, 134, 1);
+}
+
 .mobile-table-item.header {
   grid-template-columns: 64px 1fr 100px;
   background-color: #00eeffdd;
@@ -131,10 +135,58 @@ body {
 }
 
 .wkit-button {
+  font-family: "Source Code Pro";
+  font-weight: 800;
   width: fit-content;
   background-color: transparent;
+  font-size: 20px;
+  text-transform: uppercase;
 }
 
 .wkit-button:hover {
   background-color: transparent;
+}
+
+.custom-size {
+  background-size: 320px 310px !important ;
+}
+
+@media (max-width: 639px) {
+  .custom-size {
+    background-size: 420px 310px !important ;
+    min-width: 400px !important;
+  }
+}
+
+@media (max-width: 439px) {
+  .custom-size {
+    background-size: 100% 310px !important ;
+    padding-left: 20px;
+    min-width: 400px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .custom-size {
+    background-size: 100% 310px !important ;
+    padding-left: 20px;
+    min-width: 370px !important;
+  }
+}
+
+.mobile-size {
+  background-size: 200px auto !important;
+  width: 200px !important;
+}
+
+@media (max-width: 600px) {
+  .leaderbaord-page-mobile-hero {
+    aspect-ratio: 6/5;
+  }
+}
+
+@media (max-width: 450px) {
+  .leaderbaord-page-mobile-hero {
+    aspect-ratio: 11 / 11;
+  }
 }

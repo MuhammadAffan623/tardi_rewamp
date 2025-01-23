@@ -25,7 +25,7 @@ const ShapeButton: React.FC<IProps> = ({
     >
       <button
         onClick={onClick}
-        className={` btn text-[#FFFFFF] text-[20px] font-[800] ${btnClassName}`}
+        className={` btn text-[#FFFFFF] sm:text-2xl lg:text-[30px] font-[800] ${btnClassName}`}
       >
         {buttonText}
       </button>

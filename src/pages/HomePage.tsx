@@ -41,6 +41,7 @@ const HomePage = () => {
 
   const [isLoginError, setIsLoginError] = useState(false);
   const [isConnectionError, setIsConnectionError] = useState(false);
+  const [isError, setIsError] = useState(null);
   const [isWhiteliested, setIswhitelisted] = useState(false);
   const [checkboxes, setCheckboxes] = useState([
     { id: "checkbox1", label: "Connect SUI Wallet", checked: false },
@@ -145,8 +146,8 @@ const HomePage = () => {
         } else {
           localStorage.setItem("token", response?.data?.token);
           console.log("user is not white listed");
-
-          toast.error("User is not white listed");
+          setIsError("User is not white listed")
+          // toast.error("User is not white listed");
           // give error and say user not white listed
           setIswhitelisted(false);
         }
@@ -214,7 +215,8 @@ const HomePage = () => {
 
   const handleLogin = async () => {
     if (!isWhiteliested) {
-      toast.error("User is not white listed");
+      setIsError("User is not white listed")
+      // toast.error("User is not white listed");
       return;
     }
     if (isWhiteliested && telegramValue !== "" && twitterValue !== "") {
@@ -238,7 +240,7 @@ const HomePage = () => {
             //     <WalletMultiButton>Connect Wallet</WalletMultiButton>
             //   )
             // }
-            buttonText={<ConnectButton>Connect Wallet</ConnectButton>}
+            buttonText={<ConnectButton>[Connect Wallet]</ConnectButton>}
             // onClick={() => {
             //   // temp logic
             //   const newCount = tempCounter + 1;
@@ -256,14 +258,16 @@ const HomePage = () => {
 
         <Heading
           text="TARDINATORS CORE COMMUNITY"
-          className=" max-w-[500px] w-[80%] sm:w-[50%] mt-40 "
+          className="max-w-[500px] w-[80%] lg:w-[50%] mt-40 font-['Futurama Bold Font'] "
         />
         {!isTelegram && connected && (
           <CardOfCheckboxes
-            className=" w-full"
+            className=""
             checkboxes={checkboxes}
             onCheckboxChange={handleCheckboxChange}
             onButtonClick={handleLogin}
+            setIsError={setIsError}
+            isError={isError}
           />
         )}
         <>

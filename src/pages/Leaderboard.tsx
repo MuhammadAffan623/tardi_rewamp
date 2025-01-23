@@ -86,6 +86,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "rank",
     title: "Rank",
+    width: "80px",
     render: (value: string | number | User | Metrics) => (
       <span className="font-bold">{value as number}</span>
     ), // Type added to _
@@ -116,6 +117,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "metrics.impressionsCount",
     title: "Impressions",
+    width: "15%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{row.metrics.impressionsCount}</span>
     ),
@@ -123,6 +125,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "metrics.tweetsCount",
     title: "Tweets",
+    width: "15%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{row.metrics.tweetsCount}</span>
     ),
@@ -130,6 +133,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "TG Msgs",
     title: "Comments",
+    width: "13%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{row.metrics.telegramMessagesCount}</span>
     ),
@@ -137,6 +141,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "metrics.retweetsCount",
     title: "Re-Tweets",
+    width: "15%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{row.metrics.retweetsCount}</span>
     ),
@@ -144,6 +149,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "score",
     title: "score",
+    width: "10%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{row.score}</span>
     ),
@@ -236,14 +242,25 @@ const Leaderboard = () => {
           style={{
             backgroundImage: `url(${mobileHero})`,
           }}
-        ></div>
+        >
+          <ShapeButton
+            onClick={async () => {
+              localStorage.removeItem("token")
+              await disconnect();
+              navigate('/')
+            }}
+            buttonText="[LOGOUT]"
+            btnClassName="!h-[90px]"
+            containerClassName="ml-auto mb-[10px] mobile-size"
+          />
+        </div>
         <div
           className="leaderbaord-page-mobile-table"
           style={{
             backgroundImage: `url(${mobileTableBGPattern})`,
           }}
         >
-          <div className="mobile-table-item header">
+          <div className="mobile-table-item header font-bold">
             <div className="mobile-table-item--sno">Score</div>
 
             <div className="mobile-table-item--username">X</div>
@@ -252,7 +269,7 @@ const Leaderboard = () => {
           {[...filteredData].map(
             ({ userId, score }, i) => {
               return (
-                <div className="mobile-table-item">
+                <div className="mobile-table-item font-bold cursor-pointer">
                   <div className="mobile-table-item--sno">{i + 1}</div>
                   <div
                     className="mobile-table-item--avatar"
