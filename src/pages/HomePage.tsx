@@ -191,7 +191,7 @@ const HomePage = () => {
       "/users/addTelegram",
       "post",
       {
-        telegramId: telegramValue,
+        telegramId: telegramValue.startsWith("@") ? telegramValue.slice(1) :  telegramValue,
       },
       {
         headers: {
@@ -282,6 +282,8 @@ const HomePage = () => {
                   type="text"
                   onChange={(e) => setTelegramValue(e.target.value)}
                   placeholder="Enter Telegram ID"
+                  pattern="^[^@].*" 
+                  title="The first letter cannot be @" 
                 />
                 <button
                   onClick={handleTelegram}
