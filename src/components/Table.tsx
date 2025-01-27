@@ -61,7 +61,7 @@ export const Table =  <T,>({
         <div>{beforeContent}</div>
         {/* Header */}
         <div
-          className="grid py-[16px] px-[10px] lg:px-[50px] bg-[rgba(0,0,0,0.34)] pr-[10px] "
+          className="grid py-[16px] px-[10px] lg:px-[50px] bg-[rgba(0,0,0,0.34)] !pr-[10px] "
           style={{
             gridTemplateColumns: columns
               .map((col) => col.width || "1fr")
@@ -83,7 +83,7 @@ export const Table =  <T,>({
           {filteredData?.map((row: any, index: number) => (
             <div
               key={index}
-              className={`grid justify-center items-center  transition-all pl-[10px] lg:pl-[50px] pr-[10px] border-[3px] border-transparent duration-200 *:hover:text-[#75FF86] hover:border-[#75FF86]  ${
+              className={`grid justify-center items-center  transition-all pl-[10px] lg:pl-[50px] !pr-[10px] border-[3px] border-transparent duration-200 *:hover:text-[#75FF86] hover:border-[#75FF86]  ${
                 index % 2 === 0 ? "bg-[#0098BA]  " : "bg-[#071F0A00] "
               }`}
               style={{

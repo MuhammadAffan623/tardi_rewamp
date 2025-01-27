@@ -8,6 +8,7 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@suiet/wallet-kit";
 import Shapes from "../components/Shapes";
 import successBG from "../../public/common/RedBox_Buttoncard.png";
+import dangerBG from "../../public/common/errorCardd.png";
 import { apiRequest } from "../utils/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ConnectButton } from "@suiet/wallet-kit";
@@ -30,7 +31,7 @@ const HomePage = () => {
   const queryParams = new URLSearchParams(location.search);
   const params = queryParams.get("twitterToken");
   console.log(params);
-  const { connected, account } = useWallet();
+  const { connected, account, disconnect } = useWallet();
   console.log(account?.address, "connected");
   const [isTelegram, setIsTelegram] = useState(false);
   const [isX, setIsX] = useState(false);
@@ -42,6 +43,7 @@ const HomePage = () => {
   const [isLoginError, setIsLoginError] = useState(false);
   const [isConnectionError, setIsConnectionError] = useState(false);
   const [isError, setIsError] = useState(null);
+  const [isTelegramError, setIsTelegramError] = useState(null);
   const [isWhiteliested, setIswhitelisted] = useState(false);
   const [checkboxes, setCheckboxes] = useState([
     { id: "checkbox1", label: "Connect SUI Wallet", checked: false },
@@ -146,7 +148,7 @@ const HomePage = () => {
         } else {
           localStorage.setItem("token", response?.data?.token);
           console.log("user is not white listed");
-          setIsError("User is not white listed")
+          setIsError("User is not white listed");
           // toast.error("User is not white listed");
           // give error and say user not white listed
           setIswhitelisted(false);
@@ -191,31 +193,37 @@ const HomePage = () => {
       "/users/addTelegram",
       "post",
       {
-        telegramId: telegramValue.startsWith("@") ? telegramValue.slice(1) :  telegramValue,
+        telegramId: telegramValue.startsWith("@")
+          ? telegramValue.slice(1)
+          : telegramValue,
       },
       {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }
-    ).then(() => {
-      setCheckboxes((prev) =>
-        prev.map((checkbox) =>
-          checkbox.id === "checkbox2"
-            ? { ...checkbox, checked: true }
-            : checkbox
-        )
-      );
-      setIsTelegram(false);
-      if (isWhiteliested) {
-        setIsX(true);
-      }
-    });
+    )
+      .then(() => {
+        setCheckboxes((prev) =>
+          prev.map((checkbox) =>
+            checkbox.id === "checkbox2"
+              ? { ...checkbox, checked: true }
+              : checkbox
+          )
+        );
+        setIsTelegram(false);
+        if (isWhiteliested) {
+          setIsX(true);
+        }
+      })
+      .catch(() => {
+        setIsTelegramError("Telegram already in used!!");
+      });
   };
 
   const handleLogin = async () => {
     if (!isWhiteliested) {
-      setIsError("User is not white listed")
+      setIsError("User is not white listed");
       // toast.error("User is not white listed");
       return;
     }
@@ -255,10 +263,26 @@ const HomePage = () => {
             isErrorBtn={isConnectionError}
           />
         )}
+        <>
+          {isError && connected && (
+            <ShapeButton
+              onClick={async () => {
+                localStorage.removeItem("token");
+                await disconnect();
+              }}
+              buttonText={"[DISCONNECT WALLET]"}
+              btnClassName="lg:!text-[18px] font-bolder"
+              containerClassName=" mt-[50px] ml-auto "
+              isErrorBtn={isError}
+            />
+          )}
+        </>
 
         <Heading
           text="TARDINATORS CORE COMMUNITY"
-          className="max-w-[500px] w-[80%] lg:w-[50%] mt-40 font-['Futurama Bold Font'] "
+          className={`max-w-[500px] w-[80%] lg:w-[50%] ${
+            isError ? "mt-10" : "mt-40"
+          } font-['Futurama Bold Font'] `}
         />
         {!isTelegram && connected && (
           <CardOfCheckboxes
@@ -273,23 +297,33 @@ const HomePage = () => {
         <>
           {isTelegram && (
             <Shapes
-              bgShapeImg={successBG}
+              bgShapeImg={isTelegramError ? dangerBG : successBG}
               className={` max-w-[400px] min-h-[310px]  pl-[80px] object-cover w-full`}
             >
               <div className="flex flex-col h-[90px] justify-between items-end w-[90%] mx-auto gap-5 ">
-                <input
-                  className="rounded-0 py-1 text-white bg-black w-[97%] mr-auto  focus-visible:!border-0"
-                  type="text"
-                  onChange={(e) => setTelegramValue(e.target.value)}
-                  placeholder="Enter Telegram ID"
-                  pattern="^[^@].*" 
-                  title="The first letter cannot be @" 
-                />
+                {isTelegramError ? (
+                  <span className="text-white w-full font-semibold">
+                    {isTelegramError}
+                  </span>
+                ) : (
+                  <input
+                    className="rounded-0 py-1 text-white bg-black w-[97%] mr-auto  focus-visible:!border-0"
+                    type="text"
+                    onChange={(e) => setTelegramValue(e.target.value)}
+                    placeholder="Enter Telegram ID"
+                    pattern="^[^@].*"
+                    title="The first letter cannot be @"
+                  />
+                )}
                 <button
-                  onClick={handleTelegram}
+                  onClick={() =>
+                    isTelegramError
+                      ? setIsTelegramError(null)
+                      : handleTelegram()
+                  }
                   className="w-full flex justify-end text-white font-['Source_Code_Pro'] mt-10 font-[800] text-[20px] py-2 px-4 "
                 >
-                  [Submit]
+                  {isTelegramError ? "[Retry]" : "[Submit]"}
                 </button>
               </div>
             </Shapes>

@@ -99,7 +99,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
       _: string | number | User | Metrics,
       row: LeaderboardEntry // Type added to _
     ) => (
-      <div className="flex items-center min-w-[240px] gap-3">
+      <div className="flex items-center gap-1">
         <div className="relative">
           <img
             src={row?.userId?.profileImage ?? profileImg}
@@ -125,7 +125,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "metrics.tweetsCount",
     title: "Tweets",
-    width: "15%",
+    width: "12%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{row.metrics.tweetsCount}</span>
     ),
@@ -133,9 +133,9 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "TG Msgs",
     title: "Comments",
-    width: "13%",
+    width: "12%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
-      <span>{row.metrics.telegramMessagesCount}</span>
+      <span>{row.metrics.commentCount}</span>
     ),
   },
   {
@@ -144,6 +144,14 @@ const columns: TableColumn<LeaderboardEntry>[] = [
     width: "15%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{row.metrics.retweetsCount}</span>
+    ),
+  },
+  {
+    key: "metrics.telegramMessagesCount",
+    title: "TG Msgs",
+    width: "10%",
+    render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
+      <span>{row.metrics.telegramMessagesCount}</span>
     ),
   },
   {
@@ -205,7 +213,7 @@ const Leaderboard = () => {
           containerClassName="ml-auto mb-[10px]"
         />
         <Heading text="TARDINATORS LEADERBOARD" />
-        <div className="max-w-[1194px] mx-auto">
+        <div className="max-w-full mx-auto">
           <Search
             containerClassName="ml-[-16px]"
             value={search}
@@ -215,7 +223,7 @@ const Leaderboard = () => {
             columns={columns}
             data={filteredData ?? []}
             searchValue={search}
-            className="max-w-[1294px] shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+            className="max-w-full shadow-[0_0_30px_rgba(6,182,212,0.15)]"
             beforeContent={
               <div className="w-full bg-[#00EEFF] px-2 pb-[2px]">
                 <img className="h-[15px]" src={topImage} alt="" />

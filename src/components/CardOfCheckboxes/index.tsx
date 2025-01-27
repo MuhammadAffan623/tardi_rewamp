@@ -51,7 +51,7 @@ const CardOfCheckboxes: React.FC<CardOfCheckboxesProps> = ({
         </>
         <button
           onClick={() => {
-            isError ? setIsError(null) : onButtonClick()
+            isError ? '' : onButtonClick()
           }}
           className="w-full flex justify-end uppercase text-white font-['Source_Code_Pro'] font-[800] text-[20px] py-2 px-4 "
         >
