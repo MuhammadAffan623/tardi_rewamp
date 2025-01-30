@@ -102,7 +102,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
       <div className="flex items-center gap-1">
         <div className="relative">
           <img
-            src={row?.userId?.profileImage ?? profileImg}
+            src={row?.userId?.profileImage || profileImg}
             alt={row?.userId?.twitterUsername ?? ""}
             className="min-w-[48px] min-h-[48px] w-[48px] h-[48px] object-cover border border-cyan-500/50"
           />
