@@ -17,7 +17,7 @@ import { apiRequest } from "../utils/axios";
 import mobileHero from "../../public/leaderbaord-page-mobile-hero.png";
 import { useWallet } from "@suiet/wallet-kit";
 import { useNavigate } from "react-router-dom";
-
+import { formatNumber } from "../utils";
 
 interface User {
   _id: string;
@@ -48,8 +48,8 @@ interface LeaderboardEntry {
 
 interface IGetLeaderboard {
   data: {
-    leaderBoard: LeaderboardEntry[]
-  }
+    leaderBoard: LeaderboardEntry[];
+  };
 }
 
 // const columns: TableColumn<LeaderboardEntry>[] = [
@@ -119,7 +119,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
     title: "Impressions",
     width: "15%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
-      <span>{row.metrics.impressionsCount}</span>
+      <span>{formatNumber(row.metrics.impressionsCount || 0)}</span>
     ),
   },
   {
@@ -127,7 +127,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
     title: "Tweets",
     width: "12%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
-      <span>{row.metrics.tweetsCount}</span>
+      <span>{formatNumber(row.metrics.tweetsCount || 0)}</span>
     ),
   },
   {
@@ -135,7 +135,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
     title: "Comments",
     width: "12%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
-      <span>{row.metrics.commentCount}</span>
+      <span>{formatNumber(row.metrics.commentCount || 0)}</span>
     ),
   },
   {
@@ -143,7 +143,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
     title: "Re-Tweets",
     width: "15%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
-      <span>{row.metrics.retweetsCount}</span>
+      <span>{formatNumber(row.metrics.retweetsCount || 0)}</span>
     ),
   },
   {
@@ -151,7 +151,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
     title: "TG Msgs",
     width: "10%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
-      <span>{row.metrics.telegramMessagesCount}</span>
+      <span>{formatNumber(row.metrics.telegramMessagesCount || 0)}</span>
     ),
   },
   {
@@ -159,7 +159,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
     title: "score",
     width: "10%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
-      <span>{row.score}</span>
+      <span>{formatNumber(row.score || 0)}</span>
     ),
   },
 ];
@@ -174,7 +174,10 @@ const Leaderboard = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const response = await apiRequest<IGetLeaderboard>('/leaderboard/today', 'get')
+        const response = await apiRequest<IGetLeaderboard>(
+          "/leaderboard/today",
+          "get"
+        );
         setData(response?.data?.leaderBoard);
         setFilteredData(response?.data?.leaderBoard); // Initialize with full data
       } catch (err) {
@@ -194,9 +197,8 @@ const Leaderboard = () => {
             .includes(search.toLowerCase())
         )
       );
-    }
-    else {
-      setFilteredData(data)
+    } else {
+      setFilteredData(data);
     }
   }, [search, data]);
 
@@ -205,9 +207,9 @@ const Leaderboard = () => {
       <div className="mx-auto min-h-screen py-[50px] max-w-[1470px] w-[90%] leaderbaord-page-desktop">
         <ShapeButton
           onClick={async () => {
-            localStorage.removeItem("token")
+            localStorage.removeItem("token");
             await disconnect();
-            navigate('/')
+            navigate("/");
           }}
           buttonText="[LOGOUT]"
           containerClassName="ml-auto mb-[10px]"
@@ -253,9 +255,9 @@ const Leaderboard = () => {
         >
           <ShapeButton
             onClick={async () => {
-              localStorage.removeItem("token")
+              localStorage.removeItem("token");
               await disconnect();
-              navigate('/')
+              navigate("/");
             }}
             buttonText="[LOGOUT]"
             btnClassName="!h-[90px]"
@@ -274,25 +276,25 @@ const Leaderboard = () => {
             <div className="mobile-table-item--username">X</div>
             <div className="mobile-table-item--points">Points</div>
           </div>
-          {[...filteredData].map(
-            ({ userId, score }, i) => {
-              return (
-                <div className="mobile-table-item font-bold cursor-pointer">
-                  <div className="mobile-table-item--sno">{i + 1}</div>
-                  <div
-                    className="mobile-table-item--avatar"
-                    style={{
-                      backgroundImage: `url(${userId?.profileImage || profileImg})`,
-                    }}
-                  ></div>
-                  <div className="mobile-table-item--username">{userId?.twitterUsername || ""}</div>
-                  <div className="mobile-table-item--points">
-                    {score} pts
-                  </div>
+          {[...filteredData].map(({ userId, score }, i) => {
+            return (
+              <div className="mobile-table-item font-bold cursor-pointer">
+                <div className="mobile-table-item--sno">{i + 1}</div>
+                <div
+                  className="mobile-table-item--avatar"
+                  style={{
+                    backgroundImage: `url(${
+                      userId?.profileImage || profileImg
+                    })`,
+                  }}
+                ></div>
+                <div className="mobile-table-item--username">
+                  {userId?.twitterUsername || ""}
                 </div>
-              );
-            }
-          )}
+                <div className="mobile-table-item--points">{score} pts</div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </PGLayout>
