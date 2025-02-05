@@ -108,7 +108,14 @@ const columns: TableColumn<LeaderboardEntry>[] = [
           />
           <div className="absolute inset-0 rounded-full border border-cyan-500/20 animate-pulse" />
         </div>
-        <span className="font-['Source_Code_Pro'] overflow-hidden text-ellipsis whitespace-nowrap  w-[calc(240px-60px)]">
+        <span
+          className="font-['Source_Code_Pro'] overflow-hidden text-ellipsis whitespace-nowrap  w-[calc(240px-60px)] cursor-pointer"
+          onClick={() => {
+            if (row?.userId?.twitterUsername) {
+              window.open(`https://x.com/${row?.userId?.twitterUsername}`, "_blank");
+            }
+          }}
+        >
           {row?.userId?.twitterUsername ?? ""}
         </span>
       </div>
@@ -288,10 +295,22 @@ const Leaderboard = () => {
                     })`,
                   }}
                 ></div>
-                <div className="mobile-table-item--username">
+                <div
+                  className="mobile-table-item--username"
+                  onClick={() => {
+                    if (userId?.twitterUsername) {
+                      window.open(
+                        `https://x.com/${userId.twitterUsername}`,
+                        "_blank"
+                      );
+                    }
+                  }}
+                >
                   {userId?.twitterUsername || ""}
                 </div>
-                <div className="mobile-table-item--points">{score} pts</div>
+                <div className="mobile-table-item--points">
+                  {formatNumber(score || 0)} pts
+                </div>
               </div>
             );
           })}
