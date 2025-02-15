@@ -77,6 +77,7 @@
 import React, { useState } from "react";
 import logo from "../Assets/Frame.svg";
 import bgImg from "../Assets/header_background.png";
+import { useNavigate } from "react-router-dom";
 
 type NavLinkProps = {
   href: string;
@@ -98,6 +99,7 @@ const NavLink: React.FC<NavLinkProps> = ({ children }) => {
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navLinks: { href: string; label: string }[] = [
     { href: "#tardinators", label: "tardinators" },
@@ -115,7 +117,10 @@ const Header: React.FC = () => {
       style={{ backgroundImage: `url(${bgImg})` }}
     >
       <div className="max-w-[1383px] mx-auto flex justify-between items-center">
-        <div className="flex items-center space-x-2 w-auto  xl:min-w-[150px] ">
+        <div
+          className="flex items-center space-x-2 w-auto  xl:min-w-[150px] cursor-pointer"
+          onClick={() => navigate("/leaderboard")}
+        >
           <img src={logo} alt="Logo" />
         </div>
 

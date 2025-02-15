@@ -37,21 +37,9 @@ function App() {
     <>
       <WalletProvider>
         <Routes>
+          <Route path="/" element={<Navigate to="/leaderboard" replace />} />
           {routes.map(({ path, component: Component }, index) => {
-            const isPrivate = path === "/leaderboard";
-            return (
-              <Route
-                key={index}
-                path={path}
-                element={
-                  isPrivate ? (
-                    <PrivateRoute element={<Component />} />
-                  ) : (
-                    <Component />
-                  )
-                }
-              />
-            );
+            return <Route key={index} path={path} element={<Component />} />;
           })}
         </Routes>
         <Toaster

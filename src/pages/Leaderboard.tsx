@@ -112,7 +112,10 @@ const columns: TableColumn<LeaderboardEntry>[] = [
           className="font-['Source_Code_Pro'] overflow-hidden text-ellipsis whitespace-nowrap  w-[calc(240px-60px)] cursor-pointer"
           onClick={() => {
             if (row?.userId?.twitterUsername) {
-              window.open(`https://x.com/${row?.userId?.twitterUsername}`, "_blank");
+              window.open(
+                `https://x.com/${row?.userId?.twitterUsername}`,
+                "_blank"
+              );
             }
           }}
         >
@@ -172,7 +175,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
 ];
 
 const Leaderboard = () => {
-  const { disconnect } = useWallet();
+  const { disconnect, connected } = useWallet();
   const navigate = useNavigate();
   const [search, setSearch] = useState<string>("");
   const [data, setData] = useState<LeaderboardEntry[]>([]);
@@ -214,11 +217,13 @@ const Leaderboard = () => {
       <div className="mx-auto min-h-screen py-[50px] max-w-[1470px] w-[90%] leaderbaord-page-desktop">
         <ShapeButton
           onClick={async () => {
+            if (!connected) {
+              navigate("/login");
+            }
             localStorage.removeItem("token");
             await disconnect();
-            navigate("/");
           }}
-          buttonText="[LOGOUT]"
+          buttonText={connected ? "[LOGOUT]" : "[LOGIN]"}
           containerClassName="ml-auto mb-[10px]"
         />
         <Heading text="TARDINATORS LEADERBOARD" />

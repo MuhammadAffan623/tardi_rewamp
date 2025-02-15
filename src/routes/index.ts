@@ -5,7 +5,7 @@ const leaderboard = lazy(() => import("../pages/Leaderboard"));
 
 const coreRoutes = [
   {
-    path: "/",
+    path: "/login",
     title: "TARDINATORS CORE COMMUNITY",
     component: HomePage,
   },

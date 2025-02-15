@@ -27,6 +27,6 @@ export function formatNumber(number: number) {
   } else if (number >= 1e3) {
     return format(number / 1e3) + "K";
   } else {
-    return number.toString();
+    return format(number).toString();
   }
 }
