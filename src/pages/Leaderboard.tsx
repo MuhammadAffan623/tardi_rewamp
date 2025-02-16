@@ -267,11 +267,13 @@ const Leaderboard = () => {
         >
           <ShapeButton
             onClick={async () => {
+              if (!connected) {
+                navigate("/login");
+              }
               localStorage.removeItem("token");
               await disconnect();
-              navigate("/");
             }}
-            buttonText="[LOGOUT]"
+            buttonText={connected ? "[LOGOUT]" : "[LOGIN]"}
             btnClassName="!h-[90px]"
             containerClassName="ml-auto mb-[10px] mobile-size"
           />
