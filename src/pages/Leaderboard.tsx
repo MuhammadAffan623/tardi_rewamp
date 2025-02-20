@@ -203,8 +203,8 @@ const Leaderboard = () => {
       setFilteredData(
         data.filter((entry) =>
           entry?.userId?.twitterUsername
-            .toLowerCase()
-            .includes(search.toLowerCase())
+            ?.toLowerCase()
+            .includes(search?.toLowerCase())
         )
       );
     } else {
