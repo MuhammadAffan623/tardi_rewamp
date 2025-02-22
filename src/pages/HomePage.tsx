@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import CardOfCheckboxes from "../components/CardOfCheckboxes";
 import PGLayout from "../components/PGLayout";
-import ErrorCard from "../components/ErrorCard";
 import Heading from "../components/Heading";
 import ShapeButton from "../components/ShapeButton";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@suiet/wallet-kit";
 import Shapes from "../components/Shapes";
 import successBG from "../../public/common/RedBox_Buttoncard.png";
@@ -13,6 +11,8 @@ import { apiRequest } from "../utils/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ConnectButton } from "@suiet/wallet-kit";
 import toast from "react-hot-toast";
+import Leaderboard from "./Leaderboard";
+import Footer from "../components/Footer";
 
 interface isWhiteList {
   data: {
@@ -237,99 +237,101 @@ const HomePage = () => {
     }
   };
   return (
-    <PGLayout className=" bg-cover ">
-      <div className=" mx-auto max-w-[1470px] w-[90%] flex flex-col items-center  min-h-screen">
-        {!connected && (
-          <ShapeButton
-            // buttonText={
-            //   isConnectionError ? (
-            //     "ERROR... [RETRY]"
-            //   ) : (
-            //     <WalletMultiButton>Connect Wallet</WalletMultiButton>
-            //   )
-            // }
-            buttonText={<ConnectButton>[Connect Wallet]</ConnectButton>}
-            // onClick={() => {
-            //   // temp logic
-            //   const newCount = tempCounter + 1;
-            //   setTempCounter(newCount);
-            //   setIsConnectionError((x) => !x);
-            //   if (newCount <= 2) return;
-            //   // temp logic - ends
-
-            //   setShowLoginForm(true);
-            // }}
-            containerClassName=" mt-[50px] ml-auto "
-            isErrorBtn={isConnectionError}
-          />
-        )}
-        <>
-          {isError && connected && (
+    <>
+      <PGLayout className=" bg-cover ">
+        <div className=" mx-auto max-w-[1470px] w-[90%] flex flex-col items-center  min-h-screen">
+          {!connected && (
             <ShapeButton
-              onClick={async () => {
-                localStorage.removeItem("token");
-                await disconnect();
-              }}
-              buttonText={"[DISCONNECT WALLET]"}
-              btnClassName="lg:!text-[18px] font-bolder"
+              // buttonText={
+              //   isConnectionError ? (
+              //     "ERROR... [RETRY]"
+              //   ) : (
+              //     <WalletMultiButton>Connect Wallet</WalletMultiButton>
+              //   )
+              // }
+              buttonText={<ConnectButton>[Connect Wallet]</ConnectButton>}
+              // onClick={() => {
+              //   // temp logic
+
+              //   const newCount = tempCounter + 1;
+              //   setTempCounter(newCount);
+              //   setIsConnectionError((x) => !x);
+              //   if (newCount <= 2) return;
+              //   // temp logic - ends
+
+              //   setShowLoginForm(true);
+              // }}
               containerClassName=" mt-[50px] ml-auto "
-              isErrorBtn={isError}
+              isErrorBtn={isConnectionError}
             />
           )}
-        </>
+          <>
+            {isError && connected && (
+              <ShapeButton
+                onClick={async () => {
+                  localStorage.removeItem("token");
+                  await disconnect();
+                }}
+                buttonText={"[DISCONNECT WALLET]"}
+                btnClassName="lg:!text-[18px] font-bolder"
+                containerClassName=" mt-[50px] ml-auto "
+                isErrorBtn={isError}
+              />
+            )}
+          </>
 
-        <Heading
-          text="TARDINATORS CORE COMMUNITY"
-          className={`max-w-[500px] w-[80%] lg:w-[50%] ${
-            isError ? "mt-10" : "mt-40"
-          } font-['Futurama Bold Font'] `}
-        />
-        {!isTelegram && connected && (
-          <CardOfCheckboxes
-            className=""
-            checkboxes={checkboxes}
-            onCheckboxChange={handleCheckboxChange}
-            onButtonClick={handleLogin}
-            setIsError={setIsError}
-            isError={isError}
+          <Heading
+            text="TARDINATORS CORE COMMUNITY"
+            className={`max-w-[500px] w-[80%] lg:w-[50%] ${
+              isError ? "mt-10" : "mt-40"
+            } font-['Futurama Bold Font'] `}
           />
-        )}
-        <>
-          {isTelegram && (
-            <Shapes
-              bgShapeImg={isTelegramError ? dangerBG : successBG}
-              className={` max-w-[400px] min-h-[310px]  pl-[80px] object-cover w-full`}
-            >
-              <div className="flex flex-col h-[90px] justify-between items-end w-[90%] mx-auto gap-5 ">
-                {isTelegramError ? (
-                  <span className="text-white w-full font-semibold">
-                    {isTelegramError}
-                  </span>
-                ) : (
-                  <input
-                    className="rounded-0 py-1 text-white bg-black w-[97%] mr-auto  focus-visible:!border-0"
-                    type="text"
-                    onChange={(e) => setTelegramValue(e.target.value)}
-                    placeholder="Enter Telegram ID"
-                    pattern="^[^@].*"
-                    title="The first letter cannot be @"
-                  />
-                )}
-                <button
-                  onClick={() =>
-                    isTelegramError
-                      ? setIsTelegramError(null)
-                      : handleTelegram()
-                  }
-                  className="w-full flex justify-end text-white font-['Source_Code_Pro'] mt-10 font-[800] text-[20px] py-2 px-4 "
-                >
-                  {isTelegramError ? "[Retry]" : "[Submit]"}
-                </button>
-              </div>
-            </Shapes>
+          {!isTelegram && connected && (
+            <CardOfCheckboxes
+              className=""
+              checkboxes={checkboxes}
+              onCheckboxChange={handleCheckboxChange}
+              onButtonClick={handleLogin}
+              setIsError={setIsError}
+              isError={isError}
+            />
           )}
-        </>
-        {/* {!showLoginForm ? null : !isLoginError ? (
+          <>
+            {isTelegram && (
+              <Shapes
+                bgShapeImg={isTelegramError ? dangerBG : successBG}
+                className={` max-w-[400px] min-h-[310px]  pl-[80px] object-cover w-full`}
+              >
+                <div className="flex flex-col h-[90px] justify-between items-end w-[90%] mx-auto gap-5 ">
+                  {isTelegramError ? (
+                    <span className="text-white w-full font-semibold">
+                      {isTelegramError}
+                    </span>
+                  ) : (
+                    <input
+                      className="rounded-0 py-1 text-white bg-black w-[97%] mr-auto  focus-visible:!border-0"
+                      type="text"
+                      onChange={(e) => setTelegramValue(e.target.value)}
+                      placeholder="Enter Telegram ID"
+                      pattern="^[^@].*"
+                      title="The first letter cannot be @"
+                    />
+                  )}
+                  <button
+                    onClick={() =>
+                      isTelegramError
+                        ? setIsTelegramError(null)
+                        : handleTelegram()
+                    }
+                    className="w-full flex justify-end text-white font-['Source_Code_Pro'] mt-10 font-[800] text-[20px] py-2 px-4 "
+                  >
+                    {isTelegramError ? "[Retry]" : "[Submit]"}
+                  </button>
+                </div>
+              </Shapes>
+            )}
+          </>
+          {/* {!showLoginForm ? null : !isLoginError ? (
           <CardOfCheckboxes
             className=" w-full"
             checkboxes={checkboxes}
@@ -344,8 +346,12 @@ const HomePage = () => {
             errorMsg="ERROR WITH LOGIN"
           />
         )} */}
-      </div>
-    </PGLayout>
+        </div>
+      </PGLayout>
+
+      <Leaderboard />
+      <Footer />
+    </>
   );
 };
 

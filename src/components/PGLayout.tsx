@@ -9,17 +9,24 @@ const PGLayout: React.FC<{
   bgImage?: string;
   className?: string;
   removeBg?: boolean;
-}> = ({ children, bgImage = bg, className, removeBg = false }) => {
+  isHeader?: boolean;
+}> = ({
+  children,
+  bgImage = bg,
+  className,
+  removeBg = false,
+  isHeader = false,
+}) => {
   return (
     <div className="min-h-screen flex  flex-col ">
-      <Header />
+      {isHeader ? null : <Header />}
       <main
         className={`flex-1 bg-cover bg-center ${className}`}
         style={removeBg ? {} : { backgroundImage: `url(${bgImage})` }}
       >
         {children}
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

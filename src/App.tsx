@@ -37,7 +37,7 @@ function App() {
     <>
       <WalletProvider>
         <Routes>
-          <Route path="/" element={<Navigate to="/leaderboard" replace />} />
+          {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
           {routes.map(({ path, component: Component }, index) => {
             return <Route key={index} path={path} element={<Component />} />;
           })}

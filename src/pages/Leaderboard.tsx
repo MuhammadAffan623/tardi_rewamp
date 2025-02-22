@@ -213,9 +213,9 @@ const Leaderboard = () => {
   }, [search, data]);
 
   return (
-    <PGLayout bgImage={desktopBG}>
+    <PGLayout bgImage={desktopBG} isHeader>
       <div className="mx-auto min-h-screen py-[50px] max-w-[1470px] w-[90%] leaderbaord-page-desktop">
-        <ShapeButton
+        {/* <ShapeButton
           onClick={async () => {
             if (!connected) {
               navigate("/login");
@@ -225,7 +225,7 @@ const Leaderboard = () => {
           }}
           buttonText={connected ? "[LOGOUT]" : "[LOGIN]"}
           containerClassName="ml-auto mb-[10px]"
-        />
+        /> */}
         <Heading text="TARDINATORS LEADERBOARD" />
         <div className="max-w-full mx-auto">
           <Search
@@ -265,7 +265,7 @@ const Leaderboard = () => {
             backgroundImage: `url(${mobileHero})`,
           }}
         >
-          <ShapeButton
+          {/* <ShapeButton
             onClick={async () => {
               if (!connected) {
                 navigate("/login");
@@ -276,7 +276,7 @@ const Leaderboard = () => {
             buttonText={connected ? "[LOGOUT]" : "[LOGIN]"}
             btnClassName="!h-[90px]"
             containerClassName="ml-auto mb-[10px] mobile-size"
-          />
+          /> */}
         </div>
         <div
           className="leaderbaord-page-mobile-table"
