@@ -125,17 +125,9 @@ const columns: TableColumn<LeaderboardEntry>[] = [
     ),
   },
   {
-    key: "metrics.impressionsCount",
-    title: "Impressions",
-    width: "15%",
-    render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
-      <span>{formatNumber(row.metrics.impressionsCount || 0)}</span>
-    ),
-  },
-  {
     key: "metrics.tweetsCount",
     title: "Tweets",
-    width: "12%",
+    width: "15%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{formatNumber(row.metrics.tweetsCount || 0)}</span>
     ),
@@ -143,7 +135,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "TG Msgs",
     title: "Comments",
-    width: "12%",
+    width: "15%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{formatNumber(row.metrics.commentCount || 0)}</span>
     ),
@@ -151,7 +143,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "metrics.retweetsCount",
     title: "Re-Tweets",
-    width: "15%",
+    width: "18%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{formatNumber(row.metrics.retweetsCount || 0)}</span>
     ),
@@ -159,7 +151,7 @@ const columns: TableColumn<LeaderboardEntry>[] = [
   {
     key: "metrics.telegramMessagesCount",
     title: "TG Msgs",
-    width: "10%",
+    width: "13%",
     render: (_: string | number | User | Metrics, row: LeaderboardEntry) => (
       <span>{formatNumber(row.metrics.telegramMessagesCount || 0)}</span>
     ),
